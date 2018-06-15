@@ -18,7 +18,6 @@
     "prettier": "prettier './**/*.js' './**/*.css' './**/*.md' --write",
     "prettier-list-different": "prettier './**/*.js' './**/*.css' './**/*.md' --list-different",
     "prepublish": "yarn run clean && yarn run build",
-    "demo": "webpack-dev-server --content-base dist",
     "doctoc": "doctoc README.md"
   },
   "keywords": [],
