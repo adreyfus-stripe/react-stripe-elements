@@ -15,7 +15,7 @@ class _IdealBankForm extends Component {
           type: 'ideal',
           amount: 1099,
           currency: 'eur',
-          //You can specify a custom statement descriptor
+          // You can specify a custom statement descriptor.
           statement_descriptor: 'ORDER AT11990',
           owner: {
             name: ev.target.name.value,
@@ -24,14 +24,15 @@ class _IdealBankForm extends Component {
             return_url: 'https://your-website.com/ideal-redirect',
           },
         })
-        .then((payload) => console.log('[source]', payload));
+        .then(this.props.handleResult);
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
   };
+
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit.bind(this)}>
         <label>
           Name
           <input name="name" type="text" placeholder="Jane Doe" required />
@@ -51,7 +52,7 @@ class _IdealBankForm extends Component {
                 },
               },
               invalid: {
-                color: '#9e2146',
+                color: '#c23d4b',
               },
             }}
           />
@@ -67,9 +68,9 @@ const IdealForm = injectStripe(_IdealBankForm);
 export class IdealDemo extends Component {
   render() {
     return (
-      <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
+      <StripeProvider apiKey={this.props.stripePublicKey}>
         <Elements>
-          <IdealForm />
+          <IdealForm handleResult={this.props.handleResult} />
         </Elements>
       </StripeProvider>
     );

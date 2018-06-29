@@ -95,18 +95,6 @@ module.exports = {
             ],
           },
           {
-            test: /\.css$/,
-            use: [
-              require.resolve('style-loader'),
-              {
-                loader: require.resolve('css-loader'),
-                options: {
-                  importLoaders: 1,
-                },
-              },
-            ],
-          },
-          {
             // Exclude `js` files to keep "css" loader working as it injects
             // its runtime that would otherwise processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed

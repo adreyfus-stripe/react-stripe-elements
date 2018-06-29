@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import messages from './messages';
 import copy from 'copy-to-clipboard';
 
-//Read the raw source code for each file
+// Read the raw source code for each file
 import CardCode from './components/CardDemo.js?txt';
-import SplitCardCode from './components/SplitCardDemo.js?txt';
+import SplitCardCode from './components/SplitFieldsDemo.js?txt';
 import PaymentRequestCode from './components/PaymentRequestDemo.js?txt';
 import IbanCode from './components/IbanDemo.js?txt';
 import IdealCode from './components/IdealDemo.js?txt';
@@ -15,7 +15,7 @@ import AsyncCode from './components/AsyncDemo.js?txt';
 
 import {
   CardDemo,
-  SplitCardDemo,
+  SplitFieldsDemo,
   PaymentRequestDemo,
   IbanDemo,
   IdealDemo,
@@ -25,13 +25,13 @@ import {
 import Nav from './components/Nav';
 
 import 'prismjs/components/prism-jsx';
-import './App.css';
-import './prism.css';
 
 class App extends Component {
   state = {
     messages: messages.messages,
     didCopy: false,
+    stripePublicKey: 'pk_test_6pRNASCoBOKtIshFeQd4XMUh',
+    result: {},
   };
 
   static contextTypes = {
@@ -39,12 +39,43 @@ class App extends Component {
     linkHandler: PropTypes.func,
   };
 
+  handleResult = ({error, token, source, paymentRequest}) => {
+    if (error) {
+      this.setState({result: {title: 'Error', message: error.message}});
+    } else if (token) {
+      console.log(JSON.stringify(token, null, 4));
+      this.setState({
+        result: {
+          title: 'Received a token to charge',
+          message: JSON.stringify(token, null, 4),
+        },
+      });
+      console.log(token);
+    } else if (source) {
+      this.setState({
+        result: {
+          title: 'Received a source to charge',
+          message: JSON.stringify(source, null, 4),
+        },
+      });
+    } else if (paymentRequest) {
+      this.setState({
+        result: {
+          title: 'Payment request was successful',
+          message: JSON.stringify(paymentRequest.token, null, 4),
+        },
+      });
+    } else {
+      this.setState({result: {}});
+    }
+  };
+
   getElementAndSource = () => {
     switch (this.context.route) {
       case 'card':
         return {element: <CardDemo />, source: CardCode};
       case 'split-card':
-        return {element: <SplitCardDemo />, source: SplitCardCode};
+        return {element: <SplitFieldsDemo />, source: SplitCardCode};
       case 'payment-request':
         return {
           element: <PaymentRequestDemo />,
@@ -63,6 +94,7 @@ class App extends Component {
 
   tabClicked = (id) => (evt) => {
     evt.preventDefault();
+    this.setState({result: {}});
     this.context.linkHandler(id);
   };
 
@@ -83,13 +115,6 @@ class App extends Component {
       <div className="app">
         <Nav active={this.context.route} tabClicked={this.tabClicked} />
         <div className="demo">
-          <div className="elements-preview">
-            <section className="cell example example4">
-              {element}
-              <p dangerouslySetInnerHTML={{__html: messages.p1}} />
-              <p dangerouslySetInnerHTML={{__html: messages.p2}} />
-            </section>
-          </div>
           <div className="code-container">
             <div className="code-preview">
               <button
@@ -108,6 +133,20 @@ class App extends Component {
                 />
               </pre>
             </div>
+          </div>
+          <div className="elements-preview">
+            <section className="cell example">
+              {React.cloneElement(element, {
+                stripePublicKey: this.state.stripePublicKey,
+                handleResult: this.handleResult,
+              })}
+              <p dangerouslySetInnerHTML={{__html: messages.p1}} />
+              <p dangerouslySetInnerHTML={{__html: messages.p2}} />
+            </section>
+            <section className={this.state.result.title ? 'result' : 'hidden'}>
+              <h5>{this.state.result.title}</h5>
+              <pre>{this.state.result.message}</pre>
+            </section>
           </div>
         </div>
       </div>

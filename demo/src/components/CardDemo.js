@@ -7,38 +7,52 @@ import {
 } from 'react-stripe-elements';
 
 class _CardForm extends Component {
+  state = {
+    errorMessage: '',
+  };
+
+  handleChange = ({error}) => {
+    if (error) {
+      this.setState({errorMessage: error.message});
+    }
+  };
+
   handleSubmit = (evt) => {
     evt.preventDefault();
     if (this.props.stripe) {
-      this.props.stripe
-        .createToken()
-        .then((payload) => console.log('[token]', payload));
+      this.props.stripe.createToken().then(this.props.handleResult);
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
   };
+
   render() {
     return (
       <div className="CardDemo">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit.bind(this)}>
           <label>
             Card details
             <CardElement
+              onChange={this.handleChange}
               style={{
                 base: {
                   fontSize: '16px',
                   color: '#424770',
+                  fontFamily: 'Open Sans, sans-serif',
                   letterSpacing: '0.025em',
                   '::placeholder': {
                     color: '#aab7c4',
                   },
                 },
                 invalid: {
-                  color: '#9e2146',
+                  color: '#c23d4b',
                 },
               }}
             />
           </label>
+          <div className="error" role="alert">
+            {this.state.errorMessage}
+          </div>
           <button>Pay</button>
         </form>
       </div>
@@ -51,9 +65,9 @@ const CardForm = injectStripe(_CardForm);
 export class CardDemo extends Component {
   render() {
     return (
-      <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
+      <StripeProvider apiKey={this.props.stripePublicKey}>
         <Elements>
-          <CardForm />
+          <CardForm handleResult={this.props.handleResult} />
         </Elements>
       </StripeProvider>
     );

@@ -19,11 +19,14 @@ class _PaymentRequestForm extends Component {
         label: 'Demo total',
         amount: 1000,
       },
+      // Requesting the payer’s name, email, or phone is optional, but recommended.
+      // It also results in collecting their billing address for Apple Pay.
+      requestPayerName: true,
+      requestPayerEmail: true,
     });
 
     paymentRequest.on('token', ({complete, token, ...data}) => {
-      console.log('Received Stripe token: ', token);
-      console.log('Received customer information: ', data);
+      props.handleResult({paymentRequest: {token, data}});
       complete('success');
     });
 
@@ -51,7 +54,9 @@ class _PaymentRequestForm extends Component {
           },
         }}
       />
-    ) : '';
+    ) : (
+      ''
+    );
   }
 }
 
@@ -60,9 +65,9 @@ const PaymentRequestForm = injectStripe(_PaymentRequestForm);
 export class PaymentRequestDemo extends Component {
   render() {
     return (
-      <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
+      <StripeProvider apiKey={this.props.stripePublicKey}>
         <Elements>
-          <PaymentRequestForm />
+          <PaymentRequestForm handleResult={this.props.handleResult} />
         </Elements>
       </StripeProvider>
     );

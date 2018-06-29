@@ -23,7 +23,7 @@
         },
         "ideal":
         {
-            "p1": "iDEAL is the most popular payment method in the Netherlands and requires a redirect to a bank's website. You can use the <a href='https://stripe.com/docs/stripe-js/elements/ideal-bank' target='_blank'>iDEAL element</a> to directly redirect your user to their specific bank's website.",
+            "p1": "iDEAL is the most popular payment method in the Netherlands and requires a redirect to a bank's website. You can use the <a href='https://stripe.com/docs/stripe-js/elements/ideal-bank' target='_blank'>iDEAL Element</a> to directly redirect your user to their specific bank's website.",
             "p2": "Once you have your source, you can <a href='https://stripe.com/docs/stripe-js/elements/ideal-bank#redirect' target='_blank'>redirect your user</a> to the bank's website using the redirect url Stripe sends back."
 
         },

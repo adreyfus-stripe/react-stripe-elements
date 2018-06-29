@@ -6,7 +6,7 @@ const getCurrentPath = () => {
   return path.substring(path.lastIndexOf('/') + 1) || 'card';
 };
 
-//A simple Router to control handling the links in the Header
+// A simple Router to control handling the links in the Header.
 export class Router extends Component {
   state = {
     route: getCurrentPath(),

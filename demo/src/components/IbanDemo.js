@@ -7,6 +7,16 @@ import {
 } from 'react-stripe-elements';
 
 class _IbanForm extends React.Component {
+  state = {
+    errorMessage: '',
+  };
+
+  handleChange = ({error}) => {
+    if (error) {
+      this.setState({errorMessage: error.message});
+    }
+  };
+
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
@@ -22,31 +32,35 @@ class _IbanForm extends React.Component {
             notification_method: 'email',
           },
         })
-        .then((payload) => console.log('[source]', payload));
+        .then(this.props.handleResult);
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
   };
+
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name
-          <input name="name" type="text" placeholder="Jane Doe" required />
-        </label>
-        <label>
-          Email
-          <input
-            name="email"
-            type="email"
-            placeholder="jane.doe@example.com"
-            required
-          />
-        </label>
+      <form onSubmit={this.handleSubmit.bind(this)}>
+        <div className="split-form">
+          <label>
+            Name
+            <input name="name" type="text" placeholder="Jane Doe" required />
+          </label>
+          <label>
+            Email
+            <input
+              name="email"
+              type="email"
+              placeholder="jane.doe@example.com"
+              required
+            />
+          </label>
+        </div>
         <label>
           IBAN
           <IbanElement
             supportedCountries={['SEPA']}
+            onChange={this.handleChange}
             style={{
               base: {
                 fontSize: '16px',
@@ -62,6 +76,9 @@ class _IbanForm extends React.Component {
             }}
           />
         </label>
+        <div className="error" role="alert">
+          {this.state.errorMessage}
+        </div>
         <button>Pay</button>
       </form>
     );
@@ -73,9 +90,9 @@ const IbanForm = injectStripe(_IbanForm);
 export class IbanDemo extends Component {
   render() {
     return (
-      <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
+      <StripeProvider apiKey={this.props.stripePublicKey}>
         <Elements>
-          <IbanForm />
+          <IbanForm handleResult={this.props.handleResult} />
         </Elements>
       </StripeProvider>
     );

@@ -7,28 +7,38 @@ import {
 } from 'react-stripe-elements';
 
 class _CardForm extends Component {
+  state = {
+    errorMessage: '',
+  };
+
+  handleChange = ({error}) => {
+    if (error) {
+      this.setState({errorMessage: error.message});
+    }
+  };
+
   handleReady = () => {
     console.log('[ready]');
   };
+
   handleSubmit = (evt) => {
     evt.preventDefault();
     if (this.props.stripe) {
-      this.props.stripe
-        .createToken()
-        .then((payload) => console.log('[token]', payload));
+      this.props.stripe.createToken().then(this.props.handleResult);
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
   };
+
   render() {
     return (
       <div className="CardDemo">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit.bind(this)}>
           <label>
             Card details
             {this.props.countdown > 0 ? (
               <span className="async-message">
-                Asynchronously loading Stripe in {this.props.countdown}...
+                Loading Stripe in {this.props.countdown}...
               </span>
             ) : (
               ''
@@ -45,15 +55,19 @@ class _CardForm extends Component {
                     },
                   },
                   invalid: {
-                    color: '#9e2146',
+                    color: '#c23d4b',
                   },
                 }}
                 onReady={this.handleReady}
+                onChange={this.handleChange}
               />
             ) : (
               <div className="StripeElement loading" />
             )}
           </label>
+          <div className="error" role="alert">
+            {this.state.errorMessage}
+          </div>
           <button disabled={!this.props.stripe}>Pay</button>
         </form>
       </div>
@@ -77,7 +91,7 @@ export class AsyncDemo extends Component {
     // componentDidMount only runs in a browser environment.
     // In addition to loading asynchronously, this code is safe to server-side render.
 
-    //remove our existing Stripe script to keep the DOM clean
+    // Remove our existing Stripe script to keep the DOM clean.
     document.getElementById('stripe-script').remove();
     // You can inject a script tag manually like this,
     // or you can use the 'async' attribute on the Stripe.js v3 <script> tag.
@@ -94,7 +108,7 @@ export class AsyncDemo extends Component {
       setTimeout(() => {
         clearInterval(countdown);
         this.setState({
-          stripe: window.Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh'),
+          stripe: window.Stripe(this.props.stripePublicKey),
         });
       }, 3000);
     };
@@ -105,7 +119,10 @@ export class AsyncDemo extends Component {
     return (
       <StripeProvider stripe={this.state.stripe}>
         <Elements>
-          <CardForm countdown={this.state.countdown} />
+          <CardForm
+            countdown={this.state.countdown}
+            handleResult={this.props.handleResult}
+          />
         </Elements>
       </StripeProvider>
     );

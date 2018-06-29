@@ -1,5 +1,5 @@
 export {CardDemo} from './CardDemo';
-export {SplitCardDemo} from './SplitCardDemo';
+export {SplitFieldsDemo} from './SplitFieldsDemo';
 export {PaymentRequestDemo} from './PaymentRequestDemo';
 export {IbanDemo} from './IbanDemo';
 export {IdealDemo} from './IdealDemo';

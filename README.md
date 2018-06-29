@@ -54,7 +54,7 @@ styles, fonts).
 
 ## Demo
 
-The fastest way to start playing around with `react-stripe-elements` is with our [demo](/demo)
+The fastest way to start playing around with `react-stripe-elements` is with our [demo](http://stripe.github.io/react-stripe-elements/)
 
 ![Screenshot of the demo running](demo/stripe-react-elements-demo.png)
 
