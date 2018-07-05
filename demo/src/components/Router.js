@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 const getCurrentPath = () => {
-  const hash = document.location.hash;
-  return hash === '' ? 'card' : hash.substring(hash.lastIndexOf('#') + 1);
+  const urlHash = document.location.hash;
+  return urlHash === '' ? 'card' : urlHash.substring(urlHash.lastIndexOf('#') + 1);
 };
 
 // A simple Router to control handling the links in the Header.
