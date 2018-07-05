@@ -16,7 +16,7 @@ class Nav extends Component {
     const activeTab = this.props.active;
     return (
       <header className="header">
-        <h2>Stripe React Elements</h2>
+        <h2>Stripe React Elements Demo</h2>
         <ul className="optionList" role="tablist">
           {tabs.map((tab) => {
             return (
