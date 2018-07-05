@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 const getCurrentPath = () => {
-  const path = document.location.pathname;
-  return path.substring(path.lastIndexOf('/') + 1) || 'card';
+  const hash = document.location.hash;
+  return hash === '' ? 'card' : hash.substring(hash.lastIndexOf('#') + 1);
 };
 
 // A simple Router to control handling the links in the Header.
@@ -19,7 +19,7 @@ export class Router extends Component {
 
   handleLinkClick = (route) => {
     this.setState({route});
-    window.history.pushState(null, '', route);
+    window.history.pushState(null, '', `#${route}`);
   };
 
   getChildContext() {

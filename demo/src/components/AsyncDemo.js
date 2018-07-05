@@ -45,6 +45,8 @@ class _CardForm extends Component {
             )}
             {this.props.stripe ? (
               <CardElement
+                // We recommend defining these styles as a global object in your app 
+                // to be reused across multiple Elements.
                 style={{
                   base: {
                     fontSize: '16px',

@@ -34,6 +34,8 @@ class _CardForm extends Component {
             Card details
             <CardElement
               onChange={this.handleChange}
+              // We recommend defining these styles as a global object in your app 
+              // to be reused across multiple Elements.
               style={{
                 base: {
                   fontSize: '16px',
