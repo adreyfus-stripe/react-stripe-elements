@@ -2,7 +2,7 @@
   "name": "stripe-react-elements-demo",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://stripe.github.io/react-stripe-elements",
+  "homepage": "https://adreyfus-stripe.github.io/react-stripe-elements",
   "dependencies": {
     "babel-core": "6.26.0",
     "babel-eslint": "7.2.3",
